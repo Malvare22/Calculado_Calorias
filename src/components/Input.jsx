@@ -1,5 +1,5 @@
-import { useContext } from "react"
-import { labels } from "../adapters/Labels"
+import { useContext, useEffect } from "react"
+import { initialErrors, initialValues, labels } from "../adapters/Labels"
 import { messageWarning } from "../utilities/LabelWarnings"
 import { validation } from "../utilities/Validations"
 import { FormContext } from "../context/FormContext"
@@ -26,7 +26,7 @@ function InputLowLevel({type, message, validation, label}) {
 
 	const handleInput = (e) => {
 		const currentValue = e.target.value;
-		setErrors({...errors, [type] : !validation(currentValue, method)});
+		setErrors({...errors, [type] : (isNaN(currentValue)) || (!isNaN(currentValue) && !validation(currentValue, method))});
 		setValues({...values, [type] : currentValue});
 	}
 
@@ -34,8 +34,8 @@ function InputLowLevel({type, message, validation, label}) {
 		<>
 				<div className='field'>
 						<label>{label}</label>
-						<input onChange={handleInput} value={values.type}></input>
-						{errors[type] == true && <h4>Error</h4>}
+						<input onChange={handleInput} value={values[type]} type="number"></input>
+						{errors[type] == true && <h4>{message}</h4>}
 				</div>
 		</>
 	)
