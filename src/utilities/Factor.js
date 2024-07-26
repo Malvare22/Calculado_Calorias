@@ -1,10 +1,8 @@
-import { to_LB } from "./Conversions";
-
-export function getFactor(weight, method){
-    let w = weight;
-    if(method == 1){
-        w = to_LB(weight);
-    }
+/**
+ * 
+ * El peso debe estar en libras
+ */
+export function getFactor(w){
 
     if(w <= 165) return 1.6;
     if(165 <= w && w <= 200) return 1.4;

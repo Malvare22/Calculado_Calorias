@@ -1,4 +1,4 @@
-import { to_cm, to_kg } from "./Conversions";
+import { to_CM, to_KG } from "./Conversions";
 
 /**
  * Method 1 = Decimal
@@ -10,7 +10,7 @@ export function ValidAge(value, method){
 export function ValidHeight(value, method){
     let v = value;
     if(method == 2){
-        v = to_cm(value);
+        v = to_CM(value);
     }
     const meters = (v/100);
     return (meters >= 1.40 && meters <= 2.25);
@@ -18,7 +18,7 @@ export function ValidHeight(value, method){
 export function ValidWeight(value, method){
     let v = value;
     if(method == 2){
-        v = to_kg(value);
+        v = to_KG(value);
     }
     return (v >= 40.50 && v <= 300);
 }

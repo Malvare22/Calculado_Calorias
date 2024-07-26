@@ -3,6 +3,8 @@ import './App.css'
 import { FormContext } from './context/FormContext';
 import Input from './components/Input';
 import { initialErrors, initialValues } from './adapters/Labels';
+import { to_IN, to_LB } from './utilities/Conversions';
+import { getResult } from './utilities/Result';
 
 function App() {
 
@@ -11,6 +13,22 @@ function App() {
 	const [method, setMethod] = useState(0);
 	const [result, setResult] = useState(0);
 
+	useEffect(
+		() => {
+			//console.log(validForm());
+			if(!validForm()) return;
+			let a = values.age, w = values.weight, h = values.height;
+			if(method == 1){
+				w = to_LB(w);
+				h = to_IN(h);
+			}
+
+			setResult(getResult(a, w, h));
+		}, [values]
+	)
+
+	
+
 	const handleMethod = (x) => {
 		setMethod(x);
 		setErrors(initialErrors);
@@ -18,7 +36,7 @@ function App() {
 	}
 
 	const validForm = () => {
-		return !(errors['age'] && errors['height'] && errors['weight']);
+		return !(errors['age'] || errors['height'] || errors['weight']);
 	};
 
 	return (
@@ -32,7 +50,7 @@ function App() {
 				<Input type={'age'}></Input>
 				<Input type={'weight'}></Input>
 				<Input type={'height'}></Input>
-				{validForm() && <>El Resultado es: X</>}
+				{validForm() && <>El Resultado es: {result}</>}
 		</FormContext.Provider>
 	)
 }
