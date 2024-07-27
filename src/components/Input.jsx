@@ -7,11 +7,11 @@ import { FormContext } from "../context/FormContext"
 /**
  * type = age, weight, height, 
  */
-export default function Input({type}) {
+export default function Input({type, label}) {
 
 	return (
 		<>
-				<InputLowLevel label={labels[type]} validation={validation[type]} message={messageWarning[type]} type={type}></InputLowLevel>
+				<InputLowLevel label={label} validation={validation[type]} message={messageWarning[type]} type={type}></InputLowLevel>
 		</>
 	)
 }
@@ -24,18 +24,32 @@ function InputLowLevel({type, message, validation, label}) {
 
 	const {values, setValues, errors, setErrors, method} = useContext(FormContext);
 
+	useEffect(
+		() => {
+			verifyInput(values[type]);
+		}, [method]
+	);
+
 	const handleInput = (e) => {
 		const currentValue = e.target.value;
-		setErrors({...errors, [type] : (isNaN(currentValue)) || (!isNaN(currentValue) && !validation(currentValue, method))});
+		verifyInput(currentValue);
 		setValues({...values, [type] : currentValue});
 	}
+
+	const verifyInput = (v) =>{
+		setErrors({...errors, [type] : (isNaN(v)) || (!isNaN(v) && !validation(v, method))});
+	};
+
+	const validToShowError = () =>{
+		return errors[type] == true && values[type] != '';
+	};
 
 	return (
 		<>
 				<div className='field'>
-						<label>{label}</label>
-						<input onChange={handleInput} value={values[type]} type="number"></input>
-						{errors[type] == true && <h4>{message}</h4>}
+						<div><label>{label}</label></div>
+						<input onChange={handleInput} value={values[type]} 	className={'fail_input'} type="number"></input>
+						{validToShowError() && <h4>{message}</h4>}
 				</div>
 		</>
 	)
