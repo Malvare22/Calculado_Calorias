@@ -3,7 +3,7 @@ import './App.css'
 import { FormContext } from './context/FormContext';
 import Input from './components/Input';
 import { initialErrors, initialValues } from './adapters/Labels';
-import { to_IN, to_LB } from './utilities/Conversions';
+import { to_IN, to_KG, to_LB } from './utilities/Conversions';
 import { getResult } from './utilities/Result';
 
 function App() {
@@ -15,7 +15,6 @@ function App() {
 
 	useEffect(
 		() => {
-			//console.log(validForm());
 			if(!validForm()) return;
 			let a = values.age, w = values.weight, h = values.height;
 			if(method == 1){
@@ -24,13 +23,13 @@ function App() {
 			}
 
 			setResult(getResult(a, w, h));
-		}, [values]
+		}, [values, method]
 	)
-
-	
 
 	const handleMethod = (x) => {
 		setMethod(x);
+		setErrors(initialErrors);
+		setValues(initialValues);
 	}
 
 	const validForm = () => {
@@ -44,8 +43,8 @@ function App() {
 			<div className='container'>
 				<div className='form'>
 					<div className='options'>
-						<button onClick={() => handleMethod(1)} className={method == 1 && 'selected'}>Sistema Decimal</button>
-						<button onClick={() => handleMethod(2)} className={method == 2 && 'selected'}>Sistema Imperial</button>
+						<button onClick={() => handleMethod(1)} className={method == 1 ? 'selected' : ''}>Sistema Decimal</button>
+						<button onClick={() => handleMethod(2)} className={method == 2 ? 'selected' : ''}>Sistema Imperial</button>
 					</div>
 					<div className='container_input'>
 						<Input type={'age'} label={'Edad (años)'}></Input>

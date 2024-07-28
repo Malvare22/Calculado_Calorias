@@ -24,21 +24,13 @@ function InputLowLevel({type, message, validation, label}) {
 
 	const {values, setValues, errors, setErrors, method} = useContext(FormContext);
 
-	useEffect(
-		() => {
-			verifyInput(values[type]);
-		}, [method]
-	);
-
 	const handleInput = (e) => {
 		const currentValue = e.target.value;
-		verifyInput(currentValue);
+		if (currentValue < 0)  return;
 		setValues({...values, [type] : currentValue});
+		let invalid = (isNaN(currentValue)) || (!validation(currentValue, method));
+		setErrors({...errors, [type] : invalid});
 	}
-
-	const verifyInput = (v) =>{
-		setErrors({...errors, [type] : (isNaN(v)) || (!isNaN(v) && !validation(v, method))});
-	};
 
 	const validToShowError = () =>{
 		return errors[type] == true && values[type] != '';
@@ -48,8 +40,8 @@ function InputLowLevel({type, message, validation, label}) {
 		<>
 				<div className='field'>
 						<div><label>{label}</label></div>
-						<input onChange={handleInput} value={values[type]} 	className={'fail_input'} type="number"></input>
-						{validToShowError() && <h4>{message}</h4>}
+						<input onChange={handleInput} value={values[type]} type="number"></input>
+						{(validToShowError() == true)&& <h4>{message}</h4>}
 				</div>
 		</>
 	)

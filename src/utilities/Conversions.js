@@ -1,5 +1,5 @@
 export function to_CM(x){
-    return 2.54 * x;
+    return (2.54 * x);
 }
 
 export function to_LB(x){
